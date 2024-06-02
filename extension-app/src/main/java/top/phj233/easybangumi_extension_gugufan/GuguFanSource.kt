@@ -4,6 +4,9 @@ import com.heyanle.extension_api.ExtensionIconSource
 import com.heyanle.extension_api.ExtensionSource
 import top.phj233.easybangumi_extension_gugufan.component.GuguFanDetailedComponent
 import top.phj233.easybangumi_extension_gugufan.component.GuguFanPageComponent
+import top.phj233.easybangumi_extension_gugufan.component.GuguFanPlayComponent
+import top.phj233.easybangumi_extension_gugufan.component.GuguFanSearchComponent
+import top.phj233.easybangumi_extension_gugufan.util.GuguFanUtil
 import kotlin.reflect.KClass
 
 class GuguFanSource : ExtensionSource(), ExtensionIconSource {
@@ -14,7 +17,7 @@ class GuguFanSource : ExtensionSource(), ExtensionIconSource {
     override val version: String
         get() = "1.0"
     override val versionCode: Int
-        get() = 6
+        get() = 7
     override val sourceKey: String
         get() = "gugufan"
 
@@ -25,7 +28,11 @@ class GuguFanSource : ExtensionSource(), ExtensionIconSource {
     override fun register(): List<KClass<*>> {
         return listOf(
             GuguFanPageComponent::class,
-            GuguFanDetailedComponent::class
+            GuguFanDetailedComponent::class,
+            GuguFanPlayComponent::class,
+            GuguFanSearchComponent::class,
+            GuguFanUtil::class,
+
         )
     }
 
