@@ -10,7 +10,7 @@ import com.heyanle.easybangumi4.source_api.withResult
 import kotlinx.coroutines.Dispatchers
 import top.phj233.easybangumi_extension_gugufan.util.GuguFanUtil
 
-class GuguFanDetailedComponent : ComponentWrapper(), DetailedComponent {
+class GuguFanDetailedComponent(private val guguFanUtil: GuguFanUtil) : ComponentWrapper(), DetailedComponent {
     override suspend fun getAll(summary: CartoonSummary): SourceResult<Pair<Cartoon, List<PlayLine>>> {
         return withResult(Dispatchers.IO) {
             val cartoon = getCartoonDetailById(summary.id)
@@ -32,13 +32,13 @@ class GuguFanDetailedComponent : ComponentWrapper(), DetailedComponent {
     }
 
     private fun getCartoonDetailById(id: String): Cartoon {
-        val videoDetail = GuguFanUtil().getCartoonDetailById(id)
+        val videoDetail = guguFanUtil.getCartoonDetailById(id)
         videoDetail.source = source.key
         return videoDetail
     }
 
     private fun getPlayLineById(string: String): List<PlayLine> {
-        return GuguFanUtil().getPlayLineById(string)
+        return guguFanUtil.getPlayLineById(string)
     }
 
 }

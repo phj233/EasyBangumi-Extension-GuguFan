@@ -9,7 +9,7 @@ import com.heyanle.easybangumi4.source_api.withResult
 import kotlinx.coroutines.Dispatchers
 import top.phj233.easybangumi_extension_gugufan.util.GuguFanUtil
 
-class GuguFanPageComponent : ComponentWrapper(),PageComponent {
+class GuguFanPageComponent(private val guguFanUtil: GuguFanUtil) : ComponentWrapper(),PageComponent {
     override fun getPages(): List<SourcePage> {
         return listOf(
             SourcePage.SingleCartoonPage.WithCover("最近更新", { 1 }){
@@ -21,22 +21,21 @@ class GuguFanPageComponent : ComponentWrapper(),PageComponent {
     }
 
     private fun recentUpdate(): Pair<Int?, List<CartoonCover>> {
-        val cartoon = GuguFanUtil().getRecentUpdate()
-        val items = arrayListOf<CartoonCover>()
-        cartoon.forEach {
-            items.add(CartoonCoverImpl(
-                id = getElementId(it.getElementsByClass("public-list-exp").attr("href")),
+        val cartoonElements = guguFanUtil.getRecentUpdate()
+        val cartoons = arrayListOf<CartoonCover>()
+        cartoonElements.forEach {
+            cartoons.add(CartoonCoverImpl(
+                id = getCartoonId(it.getElementsByClass("public-list-exp").attr("href")),
                 title = it.getElementsByClass("public-list-exp").attr("title"),
-                url = GuguFanUtil().url + it.getElementsByClass("public-list-exp").attr("href"),
+                url = guguFanUtil.url + it.getElementsByClass("public-list-exp").attr("href"),
                 coverUrl = it.getElementsByTag("img").attr("data-src") ,
                 source = source.key
             ))
         }
-        return Pair(null, items)
+        return Pair(null, cartoons)
     }
 
-    private fun getElementId(url: String): String {
-        //正则匹配 id/ 后的数字
+    private fun getCartoonId(url: String): String {
         val regex = Regex("id/(\\d+)")
         return regex.find(url)!!.groupValues[1]
     }
