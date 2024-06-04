@@ -6,6 +6,7 @@ import com.heyanle.easybangumi4.source_api.entity.Episode
 import com.heyanle.easybangumi4.source_api.entity.PlayLine
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
+import org.jsoup.nodes.Element
 import org.jsoup.select.Elements
 
 class GuguFanUtil {
@@ -16,6 +17,7 @@ class GuguFanUtil {
     private var playerPageUrl: String = "https://www.gugufan.com/index.php/vod/play/id/"
     private var userAgent: String =
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36 Edg/125.0.0.0"
+
     fun getRecentUpdate(): Elements {
         val recentUpdateDocument = Jsoup.connect("$url/index.php/map/index.html").userAgent(userAgent).get()
         val recentUpdateElement = recentUpdateDocument.getElementsByClass("public-list-box public-pic-b [swiper]")
@@ -96,6 +98,16 @@ class GuguFanUtil {
 
     fun getSearchResult(keyword: String, page: Int): Elements {
         return Jsoup.connect("$searchPageUrl$page/wd/$keyword.html").userAgent(userAgent).get().getElementsByClass("public-list-exp")
+    }
+
+    fun getWeekElement(): Element {
+        return Jsoup.connect(url).userAgent(userAgent).get().getElementById("week-module-box")!!
+    }
+
+    fun getWeekElement(html: String): Element {
+        val doc = Jsoup.parse(html)
+        val weekElement = doc.getElementById("week-module-box")!!
+        return weekElement
     }
 
 }

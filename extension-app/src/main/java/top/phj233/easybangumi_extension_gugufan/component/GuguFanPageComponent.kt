@@ -16,6 +16,11 @@ class GuguFanPageComponent(private val guguFanUtil: GuguFanUtil) : ComponentWrap
                 withResult(Dispatchers.IO){
                     recentUpdate()
                 }
+            },
+            SourcePage.Group("番剧周期表", false){
+                withResult(Dispatchers.IO){
+                    weeklyCartoon()
+                }
             }
         )
     }
@@ -24,17 +29,49 @@ class GuguFanPageComponent(private val guguFanUtil: GuguFanUtil) : ComponentWrap
         val cartoonElements = guguFanUtil.getRecentUpdate()
         val cartoons = arrayListOf<CartoonCover>()
         cartoonElements.forEach {
+            val cartoon = guguFanUtil.getCartoonDetailById(getCartoonId(it.getElementsByClass("public-list-exp").attr("href")))
             cartoons.add(CartoonCoverImpl(
-                id = getCartoonId(it.getElementsByClass("public-list-exp").attr("href")),
-                title = it.getElementsByClass("public-list-exp").attr("title"),
-                url = guguFanUtil.url + it.getElementsByClass("public-list-exp").attr("href"),
-                coverUrl = it.getElementsByTag("img").attr("data-src") ,
+                id = cartoon.id,
+                title = cartoon.title,
+                coverUrl = cartoon.coverUrl,
+                intro = cartoon.description,
+                url = cartoon.url,
                 source = source.key
             ))
         }
         return Pair(null, cartoons)
     }
 
+    private fun weeklyCartoon(): List<SourcePage.SingleCartoonPage> {
+        val pages = arrayListOf<SourcePage.SingleCartoonPage>()
+        val weekElement = guguFanUtil.getWeekElement()
+        val weekTabs = weekElement.getElementsByClass("week-select flex box radius overflow rel").first()!!.getElementsByTag("a")
+                .map { it.text().trim() }
+        weekTabs.forEachIndexed { index, element ->
+            val weekModel = weekElement.getElementById("week-module-${index + 1}")
+            val weekCartoons = arrayListOf<CartoonCover>()
+            val weekModelElement = weekModel!!.getElementsByClass("public-list-div public-list-bj")
+            weekModelElement.forEach {
+                val cartoon = guguFanUtil.getCartoonDetailById(getCartoonId(it.getElementsByTag("a").attr("href")))
+                weekCartoons.add(CartoonCoverImpl(
+                    id = cartoon.id,
+                    title = cartoon.title,
+                    coverUrl = cartoon.coverUrl,
+                    intro = cartoon.description,
+                    url = cartoon.url,
+                    source = source.key
+                ))
+            }
+            val page = SourcePage.SingleCartoonPage.WithCover(element, { 0 }){
+                withResult(Dispatchers.IO){
+                    Pair(null, weekCartoons)
+                }
+            }
+            pages.add(page)
+        }
+        return pages
+
+    }
     private fun getCartoonId(url: String): String {
         val regex = Regex("id/(\\d+)")
         return regex.find(url)!!.groupValues[1]
