@@ -4,7 +4,7 @@
     <application
             android:allowBackup="true"
             android:label="EasyBangumi: 咕咕番"
-            android:icon="@mipmap/gugufan"
+            android:icon="@drawable/gugufan"
             android:supportsRtl="true">
 
         <meta-data
