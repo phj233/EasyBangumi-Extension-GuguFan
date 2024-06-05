@@ -20,12 +20,12 @@ class GuguFanSearchComponent(private val guguFanUtil: GuguFanUtil): ComponentWra
             val cartoonCovers = guguFanUtil.getSearchResult(keyword, pageKey)
             val covers = arrayListOf<CartoonCover>()
             cartoonCovers.forEach {
-                val cartoon = guguFanUtil.getCartoonDetailById(getCartoonId(it.attr("href")))
                 covers.add(CartoonCoverImpl(
-                    id = cartoon.id,
-                    title = cartoon.title,
+                    id = getCartoonId(it.attr("href")),
+                    title = it.getElementsByTag("img").attr("alt")
+                        .substring(0, it.getElementsByTag("img").attr("alt").length - 3),
                     url = guguFanUtil.url + it.attr("href"),
-                    coverUrl = cartoon.coverUrl,
+                    coverUrl = it.getElementsByTag("img").attr("data-src"),
                     source = source.key
                 ))
             }

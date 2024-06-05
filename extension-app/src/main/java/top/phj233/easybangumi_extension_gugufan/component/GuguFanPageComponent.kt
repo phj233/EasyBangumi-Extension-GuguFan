@@ -29,13 +29,11 @@ class GuguFanPageComponent(private val guguFanUtil: GuguFanUtil) : ComponentWrap
         val cartoonElements = guguFanUtil.getRecentUpdate()
         val cartoons = arrayListOf<CartoonCover>()
         cartoonElements.forEach {
-            val cartoon = guguFanUtil.getCartoonDetailById(getCartoonId(it.getElementsByClass("public-list-exp").attr("href")))
             cartoons.add(CartoonCoverImpl(
-                id = cartoon.id,
-                title = cartoon.title,
-                coverUrl = cartoon.coverUrl,
-                intro = cartoon.description,
-                url = cartoon.url,
+                id = getCartoonId(it.getElementsByClass("public-list-exp").attr("href")),
+                title = it.getElementsByClass("public-list-exp").attr("title"),
+                url = guguFanUtil.url + it.getElementsByClass("public-list-exp").attr("href"),
+                coverUrl = it.getElementsByTag("img").attr("data-src") ,
                 source = source.key
             ))
         }
@@ -52,13 +50,11 @@ class GuguFanPageComponent(private val guguFanUtil: GuguFanUtil) : ComponentWrap
             val weekCartoons = arrayListOf<CartoonCover>()
             val weekModelElement = weekModel!!.getElementsByClass("public-list-div public-list-bj")
             weekModelElement.forEach {
-                val cartoon = guguFanUtil.getCartoonDetailById(getCartoonId(it.getElementsByTag("a").attr("href")))
                 weekCartoons.add(CartoonCoverImpl(
-                    id = cartoon.id,
-                    title = cartoon.title,
-                    coverUrl = cartoon.coverUrl,
-                    intro = cartoon.description,
-                    url = cartoon.url,
+                    id = getCartoonId(it.getElementsByTag("a").attr("href")),
+                    title = it.getElementsByTag("a").attr("title"),
+                    url = guguFanUtil.url + it.getElementsByTag("a").attr("href"),
+                    coverUrl = it.getElementsByTag("img").attr("data-src"),
                     source = source.key
                 ))
             }

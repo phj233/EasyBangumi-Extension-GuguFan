@@ -87,6 +87,10 @@ class GuguFanUtil {
 
     fun getResultPageSize(keyword: String): Int {
         val text = Jsoup.connect("$searchUrl$keyword").userAgent(userAgent).get().getElementsByClass("page-tip cor5").text()
+        Log.i("GuguFan", text)
+        if (text == "") {
+            return 1
+        }
         val regex = Regex("共(\\d+)条")
         val resultCount = regex.find(text)!!.groupValues[1].toInt()
         return if (resultCount % 10 == 0) {
