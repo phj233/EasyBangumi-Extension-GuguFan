@@ -1,26 +1,41 @@
+import org.jetbrains.kotlin.gradle.plugin.mpp.pm20.util.archivesName
+import java.util.*
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+}
+val keystoreProperties = Properties().apply {
+    load(file("src/keystore.properties").reader())
 }
 
 android {
     namespace = "top.phj233.easybangumi_extension_gugufan"
     compileSdk = 34
 
+    signingConfigs {
+        create("release"){
+            storeFile = file(keystoreProperties.getProperty("storeFile"))
+            storePassword = keystoreProperties.getProperty("storePassword")
+            keyAlias = keystoreProperties.getProperty("keyAlias")
+            keyPassword = keystoreProperties.getProperty("keyPassword")
+        }
+    }
     defaultConfig {
         applicationId = "top.phj233.easybangumi_extension_gugufan"
         minSdk = 24
         targetSdk = 34
         versionCode = 7
         versionName = "1.0"
-
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        archivesName.set("easybangumi-gugufan-${versionName}")
     }
 
     buildTypes {
         release {
             isMinifyEnabled = false
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            signingConfig = signingConfigs.getByName("release")
         }
     }
     compileOptions {
@@ -30,19 +45,15 @@ android {
     kotlinOptions {
         jvmTarget = "17"
     }
+    dependenciesInfo{
+        includeInApk = false
+        includeInBundle = false
+    }
 }
 
 dependencies {
     compileOnly("io.github.easybangumiorg:extension-api:1.7-SNAPSHOT")
     implementation("org.jsoup:jsoup:1.17.2")
-
-    implementation("androidx.core:core-ktx:1.13.1")
-    implementation("androidx.appcompat:appcompat:1.7.0")
-    implementation("com.google.android.material:material:1.12.0")
-    testImplementation("junit:junit:4.13.2")
-    testImplementation("io.github.easybangumiorg:extension-api:1.7-SNAPSHOT")
-    androidTestImplementation("androidx.test.ext:junit:1.1.5")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
 }
 repositories {
 }
