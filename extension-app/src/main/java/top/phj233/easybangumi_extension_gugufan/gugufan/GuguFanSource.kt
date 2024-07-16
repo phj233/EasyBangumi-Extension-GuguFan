@@ -14,7 +14,7 @@ class GuguFanSource : ExtensionSource(), ExtensionIconSource {
     override val label: String
         get() = "咕咕番"
     override val version: String
-        get() = "1.0"
+        get() = "1.1"
     override val versionCode: Int
         get() = 11
     override val sourceKey: String
