@@ -12,10 +12,10 @@
             android:value="纯纯看番扩展 Gugufan"/>
         <meta-data
             android:name="easybangumi.extension.lib.version"
-            android:value="7"/>
+            android:value="11"/>
         <meta-data
             android:name="easybangumi.extension.source"
-            android:value="top.phj233.easybangumi_extension_gugufan.GuguFanFactory"/>
+            android:value="top.phj233.easybangumi_extension_gugufan.CartoonFactory"/>
 
         <activity android:name="com.heyanle.extension_api.NoneActivity"
                   android:exported="true">

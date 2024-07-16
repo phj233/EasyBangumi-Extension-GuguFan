@@ -25,8 +25,8 @@ android {
         applicationId = "top.phj233.easybangumi_extension_gugufan"
         minSdk = 24
         targetSdk = 34
-        versionCode = 7
-        versionName = "1.0"
+        versionCode = 11
+        versionName = "1.1"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         archivesName.set("easybangumi-gugufan-${versionName}")
     }
@@ -52,8 +52,8 @@ android {
 }
 
 dependencies {
-    compileOnly("io.github.easybangumiorg:extension-api:1.7-SNAPSHOT")
-    implementation("org.jsoup:jsoup:1.17.2")
+    compileOnly("io.github.easybangumiorg:extension-api:1.11-SNAPSHOT")
+    implementation("org.jsoup:jsoup:1.18.1")
 }
 repositories {
 }
