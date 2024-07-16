@@ -7,3 +7,5 @@
 .externalNativeBuild
 .cxx
 local.properties
+/gradle
+/extension-app/proguard-rules.pro
