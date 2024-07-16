@@ -1,4 +1,4 @@
-package top.phj233.easybangumi_extension_gugufan.component
+package top.phj233.easybangumi_extension_gugufan.gugufan.component
 
 import com.heyanle.easybangumi4.source_api.SourceResult
 import com.heyanle.easybangumi4.source_api.component.ComponentWrapper
@@ -8,9 +8,9 @@ import com.heyanle.easybangumi4.source_api.entity.CartoonSummary
 import com.heyanle.easybangumi4.source_api.entity.PlayLine
 import com.heyanle.easybangumi4.source_api.withResult
 import kotlinx.coroutines.Dispatchers
-import top.phj233.easybangumi_extension_gugufan.util.GuguFanUtil
+import top.phj233.easybangumi_extension_gugufan.util.CartoonUtil
 
-class GuguFanDetailedComponent(private val guguFanUtil: GuguFanUtil) : ComponentWrapper(), DetailedComponent {
+class GuguFanDetailedComponent(private val cartoonUtil: CartoonUtil) : ComponentWrapper(), DetailedComponent {
     override suspend fun getAll(summary: CartoonSummary): SourceResult<Pair<Cartoon, List<PlayLine>>> {
         return withResult(Dispatchers.IO) {
             val cartoon = getCartoonDetailById(summary.id)
@@ -32,13 +32,13 @@ class GuguFanDetailedComponent(private val guguFanUtil: GuguFanUtil) : Component
     }
 
     private fun getCartoonDetailById(id: String): Cartoon {
-        val videoDetail = guguFanUtil.getCartoonDetailById(id)
+        val videoDetail = cartoonUtil.getCartoonDetailById("gugu",id)
         videoDetail.source = source.key
         return videoDetail
     }
 
     private fun getPlayLineById(string: String): List<PlayLine> {
-        return guguFanUtil.getPlayLineById(string)
+        return cartoonUtil.getPlayLineById("gugu",string)
     }
 
 }
