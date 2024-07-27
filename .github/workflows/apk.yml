@@ -28,7 +28,7 @@ jobs:
           alias: ${{ secrets.KEY_ALIAS }}
           keyStorePassword: ${{ secrets.KEY_STORE_PWD }}
           keyPassword: ${{ secrets.KEY_PWD }}
-      - name: Realse APK
+      - name: Release APK
         uses: ncipollo/release-action@v1
         with:
           artifacts: "extension-app/build/outputs/apk/release/*.apk"
