@@ -1,3 +1,4 @@
+
 import org.jetbrains.kotlin.gradle.plugin.mpp.pm20.util.archivesName
 import java.util.*
 
@@ -6,7 +7,16 @@ plugins {
     id("org.jetbrains.kotlin.android")
 }
 val keystoreProperties = Properties().apply {
-    load(file("src/keystore.properties").reader())
+    // 尝试从文件加载密钥库信息
+    try {
+        load(file("src/keystore.properties").reader())
+    } catch (e: Exception) {
+        // 如果文件不存在，则使用环境变量
+        setProperty("storeFile", System.getenv("SIGNING_KEY"))
+        setProperty("storePassword", System.getenv("KEY_STORE_PWD"))
+        setProperty("keyAlias", System.getenv("KEY_ALIAS"))
+        setProperty("keyPassword", System.getenv("KEY_PASSWORD"))
+    }
 }
 
 android {
