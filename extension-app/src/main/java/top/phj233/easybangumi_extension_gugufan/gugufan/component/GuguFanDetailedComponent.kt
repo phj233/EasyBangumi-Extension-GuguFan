@@ -13,32 +13,21 @@ import top.phj233.easybangumi_extension_gugufan.util.CartoonUtil
 class GuguFanDetailedComponent(private val cartoonUtil: CartoonUtil) : ComponentWrapper(), DetailedComponent {
     override suspend fun getAll(summary: CartoonSummary): SourceResult<Pair<Cartoon, List<PlayLine>>> {
         return withResult(Dispatchers.IO) {
-            val cartoon = getCartoonDetailById(summary.id)
-            val playLine = getPlayLineById(summary.id)
+            val cartoon = cartoonUtil.getCartoonDetailById(source,summary.id)
+            val playLine = cartoonUtil.getPlayLineById(source,summary.id)
             Pair(cartoon, playLine)
         }
     }
 
     override suspend fun getDetailed(summary: CartoonSummary): SourceResult<Cartoon> {
         return withResult(Dispatchers.IO) {
-            getCartoonDetailById(summary.id)
+            cartoonUtil.getCartoonDetailById(source,summary.id)
         }
     }
 
     override suspend fun getPlayLine(summary: CartoonSummary): SourceResult<List<PlayLine>> {
         return withResult(Dispatchers.IO) {
-            getPlayLineById(summary.id)
+            cartoonUtil.getPlayLineById(source,summary.id)
         }
     }
-
-    private fun getCartoonDetailById(id: String): Cartoon {
-        val videoDetail = cartoonUtil.getCartoonDetailById("gugu",id)
-        videoDetail.source = source.key
-        return videoDetail
-    }
-
-    private fun getPlayLineById(string: String): List<PlayLine> {
-        return cartoonUtil.getPlayLineById("gugu",string)
-    }
-
 }
