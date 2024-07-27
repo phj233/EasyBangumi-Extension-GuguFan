@@ -17,6 +17,11 @@ jobs:
           java-version: '17'
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v3
+        env:
+          SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
+          KEY_STORE_PWD: ${{ secrets.KEY_STORE_PWD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PWD: ${{ secrets.KEY_PWD }}
         with:
           gradle-version: 8.6
           arguments: assembleRelease
