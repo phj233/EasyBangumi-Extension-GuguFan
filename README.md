@@ -6,5 +6,6 @@
 
 内含
 
--  [咕咕番 (gugufan.com)](https://www.gugufan.com/)
+-  [咕咕番 (www.gugufan.com)](https://www.gugufan.com/)
 -  [次元城动漫 (www.cycanime.com)](https://www.cycanime.com/)
+-  [Nyafun (www.nyafun.net)](https://www.nyafun.net/)
