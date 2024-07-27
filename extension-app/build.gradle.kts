@@ -15,7 +15,7 @@ val keystoreProperties = Properties().apply {
         setProperty("storeFile", System.getenv("SIGNING_KEY"))
         setProperty("storePassword", System.getenv("KEY_STORE_PWD"))
         setProperty("keyAlias", System.getenv("KEY_ALIAS"))
-        setProperty("keyPassword", System.getenv("KEY_PASSWORD"))
+        setProperty("keyPassword", System.getenv("KEY_PWD"))
     }
 }
 
