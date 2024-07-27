@@ -12,7 +12,7 @@ import top.phj233.easybangumi_extension_gugufan.util.CartoonUtil
 class CycanimeUpdateComponent(private val cartoonUtil: CartoonUtil): ComponentWrapper(), UpdateComponent {
     override suspend fun update(cartoon: Cartoon, oldPlayLine: List<PlayLine>): SourceResult<Cartoon> {
         return withResult(Dispatchers.IO) {
-            val newPlayLine = cartoonUtil.getPlayLineById("cyc", cartoon.id)
+            val newPlayLine = cartoonUtil.getPlayLineById(source, cartoon.id)
             if (newPlayLine.size > oldPlayLine.size) {
                 cartoon.isUpdate = true
             }
