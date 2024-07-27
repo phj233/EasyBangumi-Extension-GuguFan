@@ -26,9 +26,9 @@ android {
         minSdk = 24
         targetSdk = 34
         versionCode = 11
-        versionName = "1.1"
+        versionName = "1.2"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        archivesName.set("easybangumi-gugufan-${versionName}")
+        archivesName.set("纯纯看番咕咕番插件_${versionName}")
     }
 
     buildTypes {
