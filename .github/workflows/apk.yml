@@ -24,7 +24,9 @@ jobs:
           KEY_PWD: ${{ secrets.KEY_PWD }}
         with:
           gradle-version: 8.6
-          arguments: assemble
+          arguments: assembleRelease
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
       - name: Sign APK
         uses: r0adkll/sign-android-release@v1
         with:
