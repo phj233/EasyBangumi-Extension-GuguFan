@@ -23,14 +23,14 @@ android {
     namespace = "top.phj233.easybangumi_extension_gugufan"
     compileSdk = 34
 
-    signingConfigs {
-        create("release"){
-            storeFile = file(keystoreProperties.getProperty("storeFile"))
-            storePassword = keystoreProperties.getProperty("storePassword")
-            keyAlias = keystoreProperties.getProperty("keyAlias")
-            keyPassword = keystoreProperties.getProperty("keyPassword")
-        }
-    }
+//    signingConfigs {
+//        create("release"){
+//            storeFile = file(keystoreProperties.getProperty("storeFile"))
+//            storePassword = keystoreProperties.getProperty("storePassword")
+//            keyAlias = keystoreProperties.getProperty("keyAlias")
+//            keyPassword = keystoreProperties.getProperty("keyPassword")
+//        }
+//    }
     defaultConfig {
         applicationId = "top.phj233.easybangumi_extension_gugufan"
         minSdk = 24
