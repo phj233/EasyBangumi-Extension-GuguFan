@@ -25,7 +25,22 @@ class NyafunPageComponent(private val cartoonUtil: CartoonUtil) : ComponentWrapp
                 withResult(Dispatchers.IO) {
                     cartoonUtil.weeklyCartoonGroup(source)
                 }
-            }
+            },
+            SourcePage.Group("番剧", false){
+                withResult(Dispatchers.IO) {
+                    cartoonUtil.createNyaAnimeGroup(source, "1")
+                }
+            },
+            SourcePage.Group("剧场", false){
+                withResult(Dispatchers.IO) {
+                    cartoonUtil.createNyaAnimeGroup(source, "2")
+                }
+            },
+            SourcePage.Group("特摄", false){
+                withResult(Dispatchers.IO) {
+                    cartoonUtil.createNyaAnimeGroup(source, "207")
+                }
+            },
         )
     }
 

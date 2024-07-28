@@ -14,7 +14,7 @@ class NyafunSource: ExtensionSource(), ExtensionIconSource {
     override val label: String
         get() = "Nyafun"
     override val version: String
-        get() = "1.0"
+        get() = "1.1"
     override val versionCode: Int
         get() = 11
 

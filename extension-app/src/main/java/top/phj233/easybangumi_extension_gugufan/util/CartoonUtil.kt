@@ -553,4 +553,40 @@ class CartoonUtil(private val webViewHelperV2: WebViewHelperV2, private val stri
         return pages
     }
     // NyaFun:
+
+    /**
+     * 根据番剧种类以及排序方式获取番剧列表
+     * @param category 番剧种类
+     * @return List<SourcePage.SingleAsyncPage> 番剧列表
+     * @see SourcePage.SingleAsyncPage
+     */
+    fun createNyaAnimeGroup(source: Source,category: String): ArrayList<SourcePage.SingleCartoonPage> {
+        val sort = listOf(
+            "time" to "按最新",
+            "hits" to "按最热",
+            "score" to "按评分"
+        )
+        val pages = arrayListOf<SourcePage.SingleCartoonPage>()
+        sort.forEach { (key, value) ->
+            pages.add(SourcePage.SingleCartoonPage.WithCover(value, { 1 }) {
+                withResult(Dispatchers.IO) {
+                    fetchAnimeOfCategory(source,category,key,it)!!
+               }
+            })
+        }
+        return pages
+
+
+
+    }
+    private fun fetchAnimeOfCategory(source: Source, category: String, sort: String, page: Int): Pair<Int, ArrayList<CartoonCover>>? {
+        val url = "$nyaUrl/show/$category/by/$sort/page/$page.html"
+        val cartoons: ArrayList<CartoonCover> = arrayListOf()
+        Jsoup.connect(url).userAgent(userAgent).get().getElementsByClass("public-list-exp").map {
+            cartoons.add(createCartoonCover(source, it))
+        }
+        return if (cartoons.isEmpty()) null else page + 1 to cartoons
+    }
 }
+
+
