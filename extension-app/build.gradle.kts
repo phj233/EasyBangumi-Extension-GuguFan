@@ -36,7 +36,7 @@ android {
         minSdk = 24
         targetSdk = 34
         versionCode = 11
-        versionName = "1.2"
+        versionName = "1.3"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         archivesName.set("纯纯看番咕咕番插件_${versionName}")
     }
