@@ -6,6 +6,7 @@ import com.heyanle.easybangumi4.source_api.Source
 import com.heyanle.easybangumi4.source_api.SourceResult
 import com.heyanle.easybangumi4.source_api.component.page.SourcePage
 import com.heyanle.easybangumi4.source_api.entity.*
+import com.heyanle.easybangumi4.source_api.utils.api.PreferenceHelper
 import com.heyanle.easybangumi4.source_api.utils.api.StringHelper
 import com.heyanle.easybangumi4.source_api.utils.api.WebViewHelperV2
 import com.heyanle.easybangumi4.source_api.withResult
@@ -17,10 +18,10 @@ import org.jsoup.nodes.Element
 import org.jsoup.select.Elements
 import java.util.stream.Collectors
 
-class CartoonUtil(private val webViewHelperV2: WebViewHelperV2, private val stringHelper: StringHelper) {
-    var guguUrl: String = "https://www.gugufan.com"
+class CartoonUtil(private val webViewHelperV2: WebViewHelperV2, private val stringHelper: StringHelper, private val preferenceHelper: PreferenceHelper) {
+    var guguUrl: String = preferenceHelper.get("baseUrl","https://www.gugu3.com")
     var cycUrl: String = "https://www.cycanime.com"
-    var nyaUrl: String = "https://www.nyafun.net"
+    var nyaUrl: String = preferenceHelper.get("baseUrl","https://www.nyacg.net")
     var userAgent: String =
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36 Edg/127.0.0.0"
 
