@@ -32,6 +32,7 @@ class NyafunSource: ExtensionSource(), ExtensionIconSource {
             NyafunSearchComponent::class,
             NyafunUpdateComponent::class,
             CartoonUtil::class,
+            NyafunPreferenceComponent::class,
             WebViewHelperV2::class
         )
     }

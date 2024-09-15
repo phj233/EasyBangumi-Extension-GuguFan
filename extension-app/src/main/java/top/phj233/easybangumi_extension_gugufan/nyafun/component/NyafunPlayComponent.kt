@@ -24,7 +24,7 @@ class NyafunPlayComponent(
         Log.i("NyafunPlayComponent", "cartoonPageUrl: $cartoonPageUrl")
         return withResult(Dispatchers.IO) {
             cartoonUtil.interceptVideoUrl(cartoonPageUrl).apply {
-                this.header = mapOf("Referer" to "https://play.nyafun.net/")
+                this.header = mapOf("Referer" to cartoonUtil.nyaUrl.replace("www", "play"))
             }
         }
     }
