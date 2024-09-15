@@ -32,6 +32,7 @@ class GuguFanSource : ExtensionSource(), ExtensionIconSource {
             GuguFanSearchComponent::class,
             GuguFanUpdateComponent::class,
             CartoonUtil::class,
+            GuguFanPreferenceComponent::class,
             WebViewHelperV2::class
         )
     }
