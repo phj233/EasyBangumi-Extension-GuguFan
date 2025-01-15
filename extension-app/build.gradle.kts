@@ -23,20 +23,20 @@ android {
     namespace = "top.phj233.easybangumi_extension_gugufan"
     compileSdk = 34
 
-//    signingConfigs {
-//        create("release"){
-//            storeFile = file(keystoreProperties.getProperty("storeFile"))
-//            storePassword = keystoreProperties.getProperty("storePassword")
-//            keyAlias = keystoreProperties.getProperty("keyAlias")
-//            keyPassword = keystoreProperties.getProperty("keyPassword")
-//        }
-//    }
+    signingConfigs {
+        create("release"){
+            storeFile = file(keystoreProperties.getProperty("storeFile"))
+            storePassword = keystoreProperties.getProperty("storePassword")
+            keyAlias = keystoreProperties.getProperty("keyAlias")
+            keyPassword = keystoreProperties.getProperty("keyPassword")
+        }
+    }
     defaultConfig {
         applicationId = "top.phj233.easybangumi_extension_gugufan"
         minSdk = 24
         targetSdk = 34
         versionCode = 11
-        versionName = "1.3.2"
+        versionName = "1.3.4"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         archivesName.set("纯纯看番咕咕番插件_${versionName}")
     }
@@ -45,7 +45,7 @@ android {
         release {
             isMinifyEnabled = false
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
-//            signingConfig = signingConfigs.getByName("release")
+            signingConfig = signingConfigs.getByName("release")
         }
     }
     compileOptions {

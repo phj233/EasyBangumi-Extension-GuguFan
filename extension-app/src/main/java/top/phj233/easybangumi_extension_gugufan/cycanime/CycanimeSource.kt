@@ -14,7 +14,7 @@ class CycanimeSource : ExtensionSource(), ExtensionIconSource {
     override val label: String
         get() = "次元城动漫"
     override val version: String
-        get() = "1.0"
+        get() = "1.2"
     override val versionCode: Int
         get() = 11
 
@@ -32,6 +32,7 @@ class CycanimeSource : ExtensionSource(), ExtensionIconSource {
             CycanimeSearchComponent::class,
             CycanimeUpdateComponent::class,
             CartoonUtil::class,
+            CycanimePreferenceComponent::class,
             WebViewHelperV2::class
         )
     }

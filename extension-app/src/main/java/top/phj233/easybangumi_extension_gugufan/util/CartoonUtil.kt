@@ -18,12 +18,16 @@ import org.jsoup.nodes.Element
 import org.jsoup.select.Elements
 import java.util.stream.Collectors
 
-class CartoonUtil(private val webViewHelperV2: WebViewHelperV2, private val stringHelper: StringHelper, private val preferenceHelper: PreferenceHelper) {
+class CartoonUtil(
+    private val webViewHelperV2: WebViewHelperV2,
+    private val stringHelper: StringHelper,
+    private val preferenceHelper: PreferenceHelper,) {
+
     var guguUrl: String = preferenceHelper.get("baseUrl","https://www.gugu3.com")
-    var cycUrl: String = "https://www.cycanime.com"
+    var cycUrl: String = preferenceHelper.get("baseUrl","https://web.cycback.org")
     var nyaUrl: String = preferenceHelper.get("baseUrl","https://www.nyacg.net")
-    var userAgent: String =
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36 Edg/127.0.0.0"
+    private var userAgent: String =
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36 Edg/131.0.0.0"
 
     /**
      * 获取最近更新
@@ -154,12 +158,12 @@ class CartoonUtil(private val webViewHelperV2: WebViewHelperV2, private val stri
     fun getPlayLineById(source: Source,id: String): List<PlayLine> {
         val cartoonDoc = getCartoonPageDocById(source,id)
         val playLines = arrayListOf<PlayLine>()
-        val episodes = arrayListOf<Episode>()
-        val playLabel = cartoonDoc.selectXpath("/html/body/div[5]/div[2]/div[1]/div/a")
-            .text().trim()
-        cartoonDoc.getElementsByClass("box border").forEachIndexed { index, it ->
-            val episodeElement = it.getElementsByTag("a")
-            val episodeId = when (source.key.split("-")[1]) {
+        val playLabel = cartoonDoc.selectXpath("/html/body/div[5]/div[2]/div[1]/div")
+        playLabel[0].getElementsByTag("a").forEachIndexed { index, it ->
+            val episodes = arrayListOf<Episode>()
+            val episodeElement = cartoonDoc.getElementsByClass("anthology-list-play size")[index].getElementsByTag("a")
+            episodeElement.forEachIndexed { episodeIndex, element ->
+                val episodeId = when (source.key.split("-")[1]) {
                     "gugufan" -> {
                         val regex = Regex("nid/(\\d+)")
                         regex.find(episodeElement.attr("href"))!!.groupValues[1]
@@ -172,22 +176,23 @@ class CartoonUtil(private val webViewHelperV2: WebViewHelperV2, private val stri
                     }
                     else -> throw RuntimeException("未知的搜索源")
                 }
-            val episodeOrder = index + 1
-            val episodeLabel = episodeElement.text().trim()
-            episodes.add(
-                Episode(
-                    id = episodeId,
-                    order = episodeOrder,
-                    label = episodeLabel,
+                val episodeOrder = episodeIndex + 1
+                val episodeLabel = element.text().trim()
+                episodes.add(
+                    Episode(
+                        id = episodeId,
+                        order = episodeOrder,
+                        label = episodeLabel,
+                    )
+                )
+            }
+            playLines.add(
+                PlayLine(
+                    id = (index + 1).toString(),
+                    label = it.text().trim(),
+                    episode = episodes
                 )
             )
-        }
-        PlayLine(
-            id = "1" ,
-            episode = episodes,
-            label = playLabel
-        ).let {
-            playLines.add(it)
         }
 
         return playLines
@@ -200,7 +205,7 @@ class CartoonUtil(private val webViewHelperV2: WebViewHelperV2, private val stri
      * @param keyword 搜索关键词
      * @return Int 搜索结果页数
      */
-    private fun getResultPageSize(source: Source,keyword: String): Int {
+    private suspend fun getResultPageSize(source: Source, keyword: String): Int {
         val text = when (source.key.split("-")[1]) {
                 "gugufan" -> {
                     Jsoup.connect("$guguUrl/index.php/vod/search.html?wd=$keyword").userAgent(userAgent).get().getElementsByClass("page-tip cor5").text()
@@ -209,16 +214,24 @@ class CartoonUtil(private val webViewHelperV2: WebViewHelperV2, private val stri
                     Jsoup.connect("$cycUrl/search.html?wd=$keyword").userAgent(userAgent).get().getElementsByClass("page-tip cor5").text()
                 }
                 "nyafun" -> {
-                    Jsoup.connect("$nyaUrl/search.html?wd=$keyword").userAgent(userAgent).get().getElementsByClass("page-tip cor5").text()
+                    val webView = webViewHelperV2.getGlobalWebView()
+                    webView.loadUrl("$nyaUrl/search/wd/$keyword.html")
+                    webViewHelperV2.openWebPage(webView, onCheck = {
+                        it.url?.contains("search") ?: false
+                    }, onStop = {it.stopLoading()})
+                    webViewHelperV2.renderedHtml(WebViewHelperV2
+                        .RenderedStrategy("$nyaUrl/search/wd/$keyword.html", "detector-exec.js")).content.let {
+                        Jsoup.parse(it).getElementsByClass("page-tip cor5").text()
+                    }
+
                 }
                 else -> throw RuntimeException("未知的搜索源")
             }
         if (text == "") {
             return 1
         }
-        // 共104条数据,当前1/11页
         val regex = Regex("\\d*/(\\d+)页")
-        val resultCount = regex.find(text)!!.groupValues[1].toInt()
+        val resultCount = regex.find(text.toString())!!.groupValues[1].toInt()
         return resultCount
     }
 
@@ -230,7 +243,7 @@ class CartoonUtil(private val webViewHelperV2: WebViewHelperV2, private val stri
      * @return Elements 搜索结果
      * @see Elements
      */
-    private fun getSearchResult(source: Source,keyword: String, page: Int): Elements {
+    private fun getSearchResult(source: Source, keyword: String, page: Int): Elements {
         return when (source.key.split("-")[1]) {
             "gugufan" -> {
                 Jsoup.connect("$guguUrl/index.php/vod/search/page/$page/wd/$keyword.html").userAgent(userAgent).get()
@@ -319,8 +332,8 @@ class CartoonUtil(private val webViewHelperV2: WebViewHelperV2, private val stri
      * @see PlayerInfo
      */
     suspend fun interceptVideoUrl(url: String): PlayerInfo {
-        val callBackRegex = Regex(""".*\?verify=.*""").toString()
-        val playUrl = webViewHelperV2.renderedHtml(WebViewHelperV2.RenderedStrategy(url, callBackRegex)).interceptResource
+        val callBackRegex = Regex(".*\\.(mp4|mkv|m3u8).*\\?verify=.*").toString()
+        val playUrl = webViewHelperV2.renderedHtml(WebViewHelperV2.RenderedStrategy(url, callBackRegex, timeOut = 15000L)).interceptResource
         Log.i("CartoonUtil", "playUrl: $playUrl")
         return PlayerInfo(
             uri = playUrl,
@@ -358,7 +371,7 @@ class CartoonUtil(private val webViewHelperV2: WebViewHelperV2, private val stri
      * @param pageKey 页码
      * @return Pair<Int?, ArrayList<CartoonCover>> 页码和番剧列表
      */
-    fun createSearchPage(source: Source, keyword: String, pageKey: Int): Pair<Int?, ArrayList<CartoonCover>> {
+    suspend fun createSearchPage(source: Source, keyword: String, pageKey: Int): Pair<Int?, ArrayList<CartoonCover>> {
         val pageSize = getResultPageSize(source, keyword)
         val cartoonCovers = getSearchResult(source, keyword, pageKey)
         val covers = arrayListOf<CartoonCover>()

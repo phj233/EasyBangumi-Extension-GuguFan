@@ -23,7 +23,9 @@ class CycanimePlayComponent(
         val cartoonPageUrl = "${cartoonUtil.cycUrl}/watch/${summary.id}/${playLine.id}/${episode.id}.html"
         Log.i("CycanimePlayComponent", "cartoonPageUrl: $cartoonPageUrl")
         return withResult(Dispatchers.IO) {
-            cartoonUtil.interceptVideoUrl(cartoonPageUrl)
+            cartoonUtil.interceptVideoUrl(cartoonPageUrl).apply {
+//                this.header = mapOf("Referer" to cartoonUtil.cycUrl.replace("www", "play"))
+            }
         }
     }
 
