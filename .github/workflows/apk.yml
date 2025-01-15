@@ -23,7 +23,7 @@ jobs:
           KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
           KEY_PWD: ${{ secrets.KEY_PWD }}
         with:
-          gradle-version: 8.6
+          gradle-version: 8.7
           arguments: assembleRelease
       - name: Sign APK
         uses: r0adkll/sign-android-release@v1
